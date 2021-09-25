@@ -1,6 +1,4 @@
-import pandas as pd
-
-federal_district = {
+FEDERAL_DISTRICT = {
     # ЦЕНТРАЛЬНЫЙ ФО
     1: ["Москва",
           "Московская область",
@@ -96,11 +94,11 @@ federal_district = {
           "Приморский край",
           "Сахалинская область"]}
 
-def get_federal_district(df: pd.DataFrame) -> pd.DataFrame:
-    df['federal_district'] = [str([key for key, val in federal_district.items() if row in val]) if row == row else None for row in df['region']]
-    df['federal_district'] = [i[1] for i in df['federal_district']]
-    df['federal_district'] = df['federal_district'].astype(int)
-    return df
+# def get_federal_district(df: pd.DataFrame) -> pd.DataFrame:
+#     df['federal_district'] = [str([key for key, val in federal_district.items() if row in val]) if row == row else None for row in df['region']]
+#     df['federal_district'] = [i[1] for i in df['federal_district']]
+#     df['federal_district'] = df['federal_district'].astype(int)
+#     return df
       
 
 

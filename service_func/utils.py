@@ -31,6 +31,19 @@ def get_exchange_rate(df: pd.DataFrame, currency: list, url: str = CBR_CUR_URL) 
 
 # get_exchange_rate(df, curs)
 
+
+def region_replacer(region: str) -> str:
+        """
+        Приводим названия регионов к общему виду
+        """
+        region = region.replace('Г. ', '').replace('Республика ', '').strip()
+        rep = {'Удмуртская Республика': 'Удмуртия', 
+        'Ханты-Мансийский автономный округ — Югра':'Ханты-Мансийский АО'}
+        if region in rep:
+            region = rep[region]
+        
+        return region
+
 def get_investments_data_for_region(df: pd.DataFrame) -> pd.DataFrame:
     
     """
@@ -49,17 +62,6 @@ def get_investments_data_for_region(df: pd.DataFrame) -> pd.DataFrame:
     *но более простой вариант получить таблицу с сайта kommersant.ru
     """
     
-    def region_replacer(region: str) -> str:
-        """
-        Приводим названия регионов к общему виду
-        """
-        region = region.replace('Г. ', '').replace('Республика ', '')
-        rep = {'Удмуртская Республика': 'Удмуртия', 'Ханты-Мансийский автономный округ — Югра':'Ханты-Мансийский АО'}
-        if region in rep:
-            region = rep[region]
-        
-        return region
-
     url = 'https://www.kommersant.ru/doc/4196717'
 
     tmp = pd.read_html(url, encoding='utf-8')[4]
@@ -67,14 +69,14 @@ def get_investments_data_for_region(df: pd.DataFrame) -> pd.DataFrame:
                'Ранг риска, 2019', 
                'Доля в общероссийском потенциале, 2019 год (%)']].dropna()
     tmp = pd.DataFrame({'region':  [region_replacer(i) for i in tmp.iloc[:, 0]], 
-                        'risk_rank_2019': tmp.iloc[:, 1].astype('Int64'), 
+                        'risk_rank_2019': tmp.iloc[:, 1].astype(int), 
                         'potential_percent_2019': tmp.iloc[:, 2]/10})
     
     tmp2 = pd.read_html(url, encoding='utf-8')[2][['Регион (субъект федерации)', 
                                                    'Ранг, потенциала 2019',
                                                    'Среднезавшенный индекс риска, 2019 год']].dropna()
     tmp2 = pd.DataFrame({'region': [region_replacer(i) for i in tmp2.iloc[:, 0]], 
-                         'potential_rank_2019': tmp2.iloc[:, 1].astype('Int64'), 
+                         'potential_rank_2019': tmp2.iloc[:, 1].astype(int), 
                          'weighted_risk_2019': tmp2.iloc[:, 2]/1000})
     
     res = tmp.merge(tmp2, on='region', how='left')

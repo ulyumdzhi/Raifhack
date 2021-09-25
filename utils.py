@@ -32,8 +32,6 @@ def get_exchange_rate(df: pd.DataFrame, currency: list, url: str) -> pd.DataFram
     return res
 
 
-import pandas as pd
-
 def get_investments_data_for_region(df: pd.DataFrame) -> pd.DataFrame:
     
     """
@@ -84,11 +82,3 @@ def get_investments_data_for_region(df: pd.DataFrame) -> pd.DataFrame:
     res = tmp.merge(tmp2, on='region', how='left')
     
     return res 
-
-
-
-
-
-
-
-

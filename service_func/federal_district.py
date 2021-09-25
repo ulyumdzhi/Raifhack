@@ -1,3 +1,5 @@
+import pandas as pd
+
 federal_district = {
     # ЦЕНТРАЛЬНЫЙ ФО
     1: ["Москва",
